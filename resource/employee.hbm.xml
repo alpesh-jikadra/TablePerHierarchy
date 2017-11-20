@@ -1,0 +1,47 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+          "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+          "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+	<class name="com.example.Employee" table="employee">
+		
+		<id name="empId" column="emp_id" type="int">
+			<generator class="increment" ></generator>
+		</id>
+		<property name="name" column="name" type="java.lang.String"></property>
+		
+		<property name="addressFk" column="address_fk" type="java.lang.Integer" not-null="true"/>
+		
+
+		<many-to-one name="officeAddress" class="com.example.OfficeAddress" fetch="select" not-null="false"  insert="false" update="false" >
+            <column name="address_fk" not-null="false" />
+        </many-to-one>
+        
+        
+        <many-to-one name="homeAddress" class="com.example.HomeAddress" fetch="select" not-null="false"  insert="false" update="false" >
+            <column name="address_fk" not-null="false" />
+        </many-to-one>
+        
+
+	</class>
+	
+	
+	<class name="com.example.Address" table="address" discriminator-value="addr">
+		<id name="addressId" column="addr_id" type="int">
+			<generator class="increment"></generator>
+		</id>
+		<discriminator column="type" type="string"></discriminator>
+
+		<subclass name="com.example.OfficeAddress" discriminator-value="office_emp">
+			<property name="officeAddress" column="office_address" type="java.lang.String"></property>
+		</subclass>
+
+		<subclass name="com.example.HomeAddress" discriminator-value="home_emp">
+			<property name="homeAddress" column="home_address" type="java.lang.String"></property>
+		</subclass>
+
+	</class>
+	
+
+</hibernate-mapping>
